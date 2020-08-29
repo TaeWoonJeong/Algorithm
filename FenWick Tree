@@ -1,0 +1,62 @@
+//BOJ 2042 CROCUS
+#include<cstdio>
+#include<vector>
+using namespace std;
+long long int sum(vector<long long int> &tree,int i)
+{
+    long long int ans=0;
+    while(i>0)
+    {
+        ans+=tree[i];
+        i-=(i&-i);
+    }
+    return ans;
+}
+void update(vector<long long int> &tree, int i,long long int diff)
+{
+    while(i<tree.size())
+    {
+        tree[i]+=diff;
+        i+=(i&-i);
+    }
+}
+int main(void)
+{
+    int n,m,k;
+    scanf("%d %d %d",&n,&m,&k);
+    vector<long long int> arr(n+1);
+    vector<long long int> tree(n+1);
+    for(int i=1;i<=n;i++)
+    {
+        scanf("%lld",&arr[i]);
+        update(tree,i,arr[i]);
+    }
+    m+=k;
+    /*
+    for(int i=1;i<=16;i++)
+    {
+        printf("%d ",tree[i]);
+    }
+    printf("\n");
+    */
+    while(m--)
+    {
+        int num;
+        scanf("%d",&num);
+        if(num==1)
+        {
+            int index;
+            long long int val;
+            scanf("%d %lld",&index,&val);
+            long long int diff=val-arr[index];
+            arr[index]=val;
+            update(tree,index,diff);
+        }
+        else if(num==2)
+        {
+            int left,right;
+            scanf("%d %d",&left,&right);
+            printf("%lld\n",sum(tree,right)-sum(tree,left-1));
+        }
+    }
+}
