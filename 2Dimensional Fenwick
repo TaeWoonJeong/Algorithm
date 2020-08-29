@@ -1,0 +1,57 @@
+//BOJ 11658
+#include<cstdio>
+int tree[1025][1025];
+int n,m;
+int sum(int x,int y)
+{
+    int tmp=0;
+    for(int i=x;i>0;i-=(i&-i))
+    {
+        for(int j=y;j>0;j-=(j&-j))
+        {
+            tmp+=tree[i][j];
+        }
+    }
+    return tmp;
+}
+void update(int x,int y,int val)
+{
+    for(int i=x;i<=n;i+=(i&-i))
+    {
+        for(int j=y;j<=n;j+=(j&-j))
+        {
+            tree[i][j]+=val;
+        }
+    }
+}
+int main(void)
+{
+    scanf("%d %d",&n,&m);
+    for(int i=1;i<=n;i++)
+    {
+        for(int j=1;j<=n;j++)
+        {
+            int num;
+            scanf("%d",&num);
+            update(i,j,num);
+        }
+    }
+    for(int i=0;i<m;i++)
+    {
+        int a;
+        scanf("%d",&a);
+        if(a==0)
+        {
+            int x,y,z,diff;
+            scanf("%d %d %d",&x,&y,&z);
+            diff=sum(x,y)-sum(x-1,y)-sum(x,y-1)+sum(x-1,y-1);
+            update(x,y,z-diff);
+        }
+        else
+        {
+            int x1,y1,x2,y2;
+            scanf("%d %d %d %d",&x1,&y1,&x2,&y2);
+            printf("%d\n",sum(x2,y2)-sum(x1-1,y2)-sum(x2,y1-1)+sum(x1-1,y1-1));
+        }
+    }
+}
